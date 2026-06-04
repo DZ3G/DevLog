@@ -31,7 +31,8 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    return render_template('base.html')
+    posts = Post.query.order_by(Post.date.desc()).all()
+    return render_template('index.html', posts=posts)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -63,6 +64,48 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    if request.method == 'POST':
+        post = Post(
+            title = request.form['title'],
+            content = request.form['content'],
+            user_id = current_user.id
+        )
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('post_form.html', title = 'Nouvelle entrée', post = None)
+
+@app.route('/post/<int:post_id>')
+def post_detail(post_id):
+    post = db.session.get(Post, post_id)
+    return render_template('post_detail.html', post = post)
+
+@app.route('/post/<int:post_id>/edit', methods = ['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    post = db.session.get(Post, post_id)
+    if post.user_id != current_user.id:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        post.title = request.form['title']
+        post.content = request.form['content']
+        db.session.commit()
+        return redirect(url_for('post_detail', post_id = post.id))
+    return render_template('post_form.html', title = 'Modifier', post = post)
+
+@app.route('/post/<int:post_id>/delete', methods=['POST'])
+@login_required
+def delete_post(post_id):
+    post = db.session.get(Post, post_id)
+    if post.user_id == current_user.id:
+        db.session.delete(post)
+        db.session.commit()
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     with app.app_context():
