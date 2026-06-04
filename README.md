@@ -140,6 +140,13 @@ Open `http://127.0.0.1:5000` in your browser.
 
 ---
 
+## Resources
+
+- [Flask Documentation](https://flask.palletsprojects.com/)
+- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+- [Flask-Login Documentation](https://flask-login.readthedocs.io/)
+- [roadmap.sh — Backend Path](https://roadmap.sh/backend)
+
 ## Author
 
 **Mohammed Rafik Berrached**
