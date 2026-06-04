@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevLog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <nav>
+        <a href="/" style="font-weight: bold; font-size: 1.2rem;">DevLog</a>
+        <div>
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+        </div>
+    </nav>
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>
